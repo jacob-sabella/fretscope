@@ -13,9 +13,9 @@ Real-time pitch and key detection with guitar fretboard visualization. Runs as a
 
 Built for Linux guitar players who want Scaler-style detection with a fretboard-first workflow.
 
-<!-- TODO: Add screenshots
-![Fretscope](screenshots/fretscope.png)
--->
+![Fretscope with scale overlay](screenshots/fretboard-scale.png)
+
+![Fretscope clean fretboard](screenshots/fretboard-clean.png)
 
 ## Features
 
