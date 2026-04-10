@@ -9,9 +9,9 @@
 
 # Fretscope
 
-Real-time pitch and key detection with guitar fretboard visualization. Runs as a **VST3/CLAP plugin** (load in any DAW) or as a **standalone JACK/ALSA app**.
+Real-time pitch and key detection with guitar fretboard visualization. Runs as a **VST3/CLAP plugin** (load in any DAW) or as a **standalone app**.
 
-Built for guitar players who want note detection with a fretboard-first workflow.
+Cross-platform: **Linux**, **macOS**, and **Windows**. Built for guitar players who want Scaler-style detection with a fretboard-first workflow.
 
 ![Fretscope with scale overlay](screenshots/fretboard-scale.png)
 
@@ -75,30 +75,38 @@ Built for guitar players who want note detection with a fretboard-first workflow
 
 ## Install
 
+Download a pre-built release from the [Releases page](https://github.com/jacob-sabella/fretscope/releases) or build from source.
+
+### From release (recommended)
+
+Download the archive for your platform, extract, and copy to your plugin directory:
+
+| Platform | VST3 Location | CLAP Location |
+|----------|--------------|---------------|
+| Linux | `~/.vst3/` | `~/.clap/` |
+| macOS | `~/Library/Audio/Plug-Ins/VST3/` | `~/Library/Audio/Plug-Ins/CLAP/` |
+| Windows | `C:\Program Files\Common Files\VST3\` | `C:\Program Files\Common Files\CLAP\` |
+
+### From source (Linux/macOS)
+
 ```bash
-make install
+make install      # build + copy to standard plugin dirs
+make uninstall    # remove
+make clean        # wipe build artifacts
 ```
 
-Builds a release binary and installs to standard plugin directories:
-
-| Format     | Location                   |
-|------------|----------------------------|
-| VST3       | `~/.vst3/fretscope.vst3`  |
-| CLAP       | `~/.clap/fretscope.clap`  |
-| Standalone | `~/.local/bin/fretscope`   |
-
-Most DAWs (Carla, REAPER, Bitwig, Ardour) auto-scan `~/.vst3` and `~/.clap`.
+### From source (any platform)
 
 ```bash
-make uninstall  # remove from plugin directories
-make clean      # wipe build artifacts
+cargo xtask bundle fretscope --release
+# Bundles appear in target/bundled/
 ```
 
 ## Usage
 
 ### As a plugin
 
-1. Open your DAW (e.g., Carla)
+1. Open your DAW (e.g., Carla, REAPER, Bitwig, Ableton, FL Studio)
 2. Rescan plugins if needed
 3. Add **Fretscope** to a track
 4. Route audio input to the plugin
@@ -106,8 +114,9 @@ make clean      # wipe build artifacts
 ### Standalone
 
 ```bash
-fretscope --backend jack   # JACK (for routing with Carla/other JACK apps)
-fretscope --backend alsa   # ALSA (direct audio input)
+fretscope --backend jack   # JACK (Linux)
+fretscope --backend alsa   # ALSA (Linux)
+# macOS/Windows: uses default audio backend
 ```
 
 ### Keyboard Shortcuts

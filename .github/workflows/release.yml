@@ -10,13 +10,24 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: linux-x86_64
+          - os: windows-latest
+            name: windows-x86_64
+          - os: macos-latest
+            name: macos-aarch64
+    runs-on: ${{ matrix.os }}
+    name: Build (${{ matrix.name }})
+
     steps:
       - uses: actions/checkout@v4
-
       - uses: dtolnay/rust-toolchain@stable
 
-      - name: Install system dependencies
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libasound2-dev libjack-jackd2-dev libgl1-mesa-dev libx11-dev libx11-xcb-dev libxcb1-dev libxcursor-dev libxkbcommon-dev libxkbcommon-x11-dev
@@ -27,26 +38,63 @@ jobs:
       - name: Bundle release
         run: cargo xtask bundle fretscope --release
 
-      - name: Package artifacts
+      - name: Package artifacts (Linux/macOS)
+        if: runner.os != 'Windows'
         run: |
           cd target/bundled
-          tar czf fretscope-${{ github.ref_name }}-linux-x86_64.tar.gz fretscope fretscope.clap fretscope.vst3
+          tar czf fretscope-${{ github.ref_name }}-${{ matrix.name }}.tar.gz fretscope*
+
+      - name: Package artifacts (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          cd target/bundled
+          Compress-Archive -Path fretscope* -DestinationPath fretscope-${{ github.ref_name }}-${{ matrix.name }}.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fretscope-${{ matrix.name }}
+          path: target/bundled/fretscope-${{ github.ref_name }}-${{ matrix.name }}.*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: target/bundled/fretscope-${{ github.ref_name }}-linux-x86_64.tar.gz
+          files: artifacts/*
           generate_release_notes: true
           body: |
             ## Install
 
-            Download and extract the archive, then copy the plugins to your standard directories:
+            Download the archive for your platform and extract:
 
+            **Linux:**
             ```bash
             tar xzf fretscope-${{ github.ref_name }}-linux-x86_64.tar.gz
             cp -r fretscope.vst3 ~/.vst3/
             cp fretscope.clap ~/.clap/
-            cp fretscope ~/.local/bin/
+            cp fretscope ~/.local/bin/  # standalone
             ```
 
-            Or build from source: `make install`
+            **macOS:**
+            ```bash
+            tar xzf fretscope-${{ github.ref_name }}-macos-aarch64.tar.gz
+            cp -r fretscope.vst3 ~/Library/Audio/Plug-Ins/VST3/
+            cp fretscope.clap ~/Library/Audio/Plug-Ins/CLAP/
+            ```
+
+            **Windows:**
+            Extract the zip and copy:
+            - `fretscope.vst3` → `C:\Program Files\Common Files\VST3\`
+            - `fretscope.clap` → `C:\Program Files\Common Files\CLAP\`
+
+            Or build from source: `make install` (Linux/macOS) or `cargo xtask bundle fretscope --release` (all platforms)

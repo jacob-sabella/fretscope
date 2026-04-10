@@ -8,15 +8,29 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: Linux
+          - os: windows-latest
+            name: Windows
+          - os: macos-latest
+            name: macOS
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.name }}
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - name: Install system dependencies
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libasound2-dev libjack-jackd2-dev libgl1-mesa-dev libx11-dev libx11-xcb-dev libxcb1-dev libxcursor-dev libxkbcommon-dev libxkbcommon-x11-dev
+
       - name: Run tests
         run: cargo test --lib
+
       - name: Build
         run: cargo build
