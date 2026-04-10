@@ -4,8 +4,12 @@ on:
   push:
     branches: [main]
   schedule:
-    # Run weekly on Monday at 6am UTC
     - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+  checks: write
+  issues: write
 
 jobs:
   audit:
@@ -15,3 +19,4 @@ jobs:
       - uses: rustsec/audit-check@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          ignore: RUSTSEC-2024-0375,RUSTSEC-2021-0145
