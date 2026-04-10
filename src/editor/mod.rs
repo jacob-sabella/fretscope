@@ -150,7 +150,7 @@ pub fn create(
                                     .strong(),
                             );
                             ui.label(
-                                egui::RichText::new("v0.1.0")
+                                egui::RichText::new(format!("v{}", env!("CARGO_PKG_VERSION")))
                                     .color(theme::TEXT_SECONDARY)
                                     .size(11.0),
                             );

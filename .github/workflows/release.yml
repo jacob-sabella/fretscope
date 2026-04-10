@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libjack-jackd2-dev libgl1-mesa-dev libx11-dev libxcursor-dev libxkbcommon-dev
+
+      - name: Run tests
+        run: cargo test --lib
+
+      - name: Bundle release
+        run: cargo xtask bundle fretscope --release
+
+      - name: Package artifacts
+        run: |
+          cd target/bundled
+          tar czf fretscope-${{ github.ref_name }}-linux-x86_64.tar.gz fretscope fretscope.clap fretscope.vst3
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/bundled/fretscope-${{ github.ref_name }}-linux-x86_64.tar.gz
+          generate_release_notes: true
+          body: |
+            ## Install
+
+            Download and extract the archive, then copy the plugins to your standard directories:
+
+            ```bash
+            tar xzf fretscope-${{ github.ref_name }}-linux-x86_64.tar.gz
+            cp -r fretscope.vst3 ~/.vst3/
+            cp fretscope.clap ~/.clap/
+            cp fretscope ~/.local/bin/
+            ```
+
+            Or build from source: `make install`

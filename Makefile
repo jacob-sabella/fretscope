@@ -25,3 +25,17 @@ uninstall:
 
 clean:
 	cargo clean
+
+# Usage: make release V=0.2.0
+release:
+ifndef V
+	$(error Usage: make release V=x.y.z)
+endif
+	sed -i 's/^version = ".*"/version = "$(V)"/' Cargo.toml
+	cargo build --release
+	git add Cargo.toml Cargo.lock
+	git commit -m "Release v$(V)"
+	git tag v$(V)
+	@echo ""
+	@echo "Tagged v$(V). Push with:"
+	@echo "  git push origin main --tags"
