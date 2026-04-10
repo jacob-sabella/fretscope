@@ -1,3 +1,12 @@
+<a id="readme-top"></a>
+
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![CI](https://github.com/jacob-sabella/fretscope/actions/workflows/build.yml/badge.svg)](https://github.com/jacob-sabella/fretscope/actions/workflows/build.yml)
+
 # Fretscope
 
 Real-time pitch and key detection with guitar fretboard visualization. Runs as a **VST3/CLAP plugin** (load in any DAW) or as a **standalone JACK/ALSA app**.
@@ -157,4 +166,15 @@ This entire project was vibe coded with [Claude Code](https://claude.ai/claude-c
 
 ## License
 
-MIT
+Distributed under the MIT License. See [LICENSE](LICENSE).
+
+[contributors-shield]: https://img.shields.io/github/contributors/jacob-sabella/fretscope.svg?style=for-the-badge
+[contributors-url]: https://github.com/jacob-sabella/fretscope/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/jacob-sabella/fretscope.svg?style=for-the-badge
+[forks-url]: https://github.com/jacob-sabella/fretscope/network/members
+[stars-shield]: https://img.shields.io/github/stars/jacob-sabella/fretscope.svg?style=for-the-badge
+[stars-url]: https://github.com/jacob-sabella/fretscope/stargazers
+[issues-shield]: https://img.shields.io/github/issues/jacob-sabella/fretscope.svg?style=for-the-badge
+[issues-url]: https://github.com/jacob-sabella/fretscope/issues
+[license-shield]: https://img.shields.io/github/license/jacob-sabella/fretscope.svg?style=for-the-badge
+[license-url]: https://github.com/jacob-sabella/fretscope/blob/main/LICENSE
