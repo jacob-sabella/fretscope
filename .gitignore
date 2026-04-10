@@ -1,5 +1,15 @@
+# Build
 /target
+
+# Editor/OS
 *.swp
 *.swo
 *~
 .DS_Store
+.vscode/
+.idea/
+*.iml
+
+# Plugin bundles (built via cargo xtask)
+*.vst3
+*.clap
