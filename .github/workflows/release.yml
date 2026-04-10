@@ -52,7 +52,7 @@ jobs:
           Compress-Archive -Path fretscope* -DestinationPath fretscope-${{ github.ref_name }}-${{ matrix.name }}.zip
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: fretscope-${{ matrix.name }}
           path: target/bundled/fretscope-${{ github.ref_name }}-${{ matrix.name }}.*
