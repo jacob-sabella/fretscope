@@ -11,7 +11,7 @@
 
 Real-time pitch and key detection with guitar fretboard visualization. Runs as a **VST3/CLAP plugin** (load in any DAW) or as a **standalone JACK/ALSA app**.
 
-Built for Linux guitar players who want Scaler-style detection with a fretboard-first workflow.
+Built for guitar players who want note detection with a fretboard-first workflow.
 
 ![Fretscope with scale overlay](screenshots/fretboard-scale.png)
 
