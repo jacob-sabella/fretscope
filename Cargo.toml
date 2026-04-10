@@ -1,0 +1,33 @@
+[workspace]
+members = [".", "xtask"]
+
+[package]
+name = "fretscope"
+version = "0.1.0"
+edition = "2021"
+authors = ["jsabella"]
+description = "Real-time pitch and key detection with guitar fretboard visualization"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[[bin]]
+name = "fretscope"
+path = "src/main.rs"
+
+[dependencies]
+nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git", features = ["standalone"] }
+nih_plug_egui = { git = "https://github.com/robbert-vdh/nih-plug.git" }
+pitch-detection = "0.3"
+triple_buffer = "8"
+atomic_float = "1"
+
+[profile.release]
+lto = "thin"
+strip = "symbols"
+
+[profile.profiling]
+inherits = "release"
+debug = true
+strip = false
