@@ -20,7 +20,7 @@ path = "src/main.rs"
 nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git", features = ["standalone"] }
 nih_plug_egui = { git = "https://github.com/robbert-vdh/nih-plug.git" }
 pitch-detection = "0.3"
-triple_buffer = "8"
+triple_buffer = "9"
 atomic_float = "1"
 
 [profile.release]
