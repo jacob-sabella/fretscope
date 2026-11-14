@@ -31,3 +31,10 @@ strip = "symbols"
 inherits = "release"
 debug = true
 strip = false
+
+# baseview before f7326ce ("fix gl context memory leak on linux", RustAudio/baseview#215) never
+# destroys its GLX context when the editor closes. On NVIDIA that hangs the next editor's first
+# draw, so every FretScope window opened after one is closed stays black. nih-plug pins a
+# baseview from before the fix; this moves it six small upstream commits forward to it.
+[patch."https://github.com/RustAudio/baseview.git"]
+baseview = { git = "https://www.github.com/RustAudio/baseview.git", rev = "f7326ce" }
